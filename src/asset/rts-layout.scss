@@ -1,0 +1,131 @@
+@import "variables";
+@import "mixins";
+
+.rts {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1;
+
+  &__overlay {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    z-index: 100;
+
+    &__item {
+      position: absolute;
+      z-index: 200;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+    z-index: 100;
+
+    &__section {
+      flex: 1 1;
+    }
+  }
+
+  ul, li, a, dt, dd, p {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-transform: none;
+    text-decoration: none;
+  }
+
+  h1, h2, h3 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
+
+  .color-primary {
+    color: map-get($color-primary, normal);
+  }
+
+  .color-secondary {
+    color: map-get($color-secondary, normal);
+  }
+
+  .color-error {
+    color: map-get($color-error, normal);
+  }
+
+  .bg-color-primary {
+    background-color: map-get($color-primary, normal);
+
+    a, p, li, dd {
+      color: map-get($color-primary, text);
+    }
+
+    a, p, li, dd {
+      &.hover:hover, &.active {
+        color: map-get($color-primary, text-strong);
+      }
+    }
+  }
+
+  .bg-color-secondary {
+    background-color: map-get($color-secondary, normal);
+
+    a, p, li, dd {
+      color: map-get($color-secondary, text);
+    }
+
+    a, p, li, dd {
+      &.hover:hover, &.active {
+        color: map-get($color-secondary, text-strong);
+      }
+    }
+  }
+
+  .bg-color-error {
+    background-color: map-get($color-error, normal);
+
+    a, p, li, dd {
+      color: map-get($color-error, text);
+    }
+
+    a, p, li, dd {
+      &.hover:hover, &.active {
+        color: map-get($color-error, text-strong);
+      }
+    }
+  }
+
+  .container {
+    display: flex;
+    padding: #{$base-padding}px;
+
+    &.box {
+      max-width: #{$box-width}px;
+      margin: 0 auto;
+    }
+
+    &.column {
+      flex-direction: column;
+    }
+
+    &.all-center {
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .flex-size {
+    flex: 1 1;
+  }
+}
+
+.rts-card {
+  padding: #{$base-padding}px;
+  box-shadow: 0 0 4px map-get($color-primary, normal-shadow);
+  border-radius: 4px;
+  background-color: map-get($color-gray, normal);
+}

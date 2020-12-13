@@ -1,0 +1,27 @@
+$color-primary: (
+        normal: #4d4d4d,
+        normal-shadow: rgba(77, 77, 77, 0.2),
+        text: #cdcdcd,
+        text-strong: #fff,
+);
+
+$color-gray: (
+        normal: #d6d6d6,
+);
+
+$color-secondary: (
+        normal: #d4af37,
+        text: #cdcdcd,
+        text-strong: #fff,
+);
+
+$color-error: (
+        normal: #ff4400,
+        text: #cdcdcd,
+        text-strong: #fff,
+);
+
+$box-width: 1280;
+$base-padding: 12;
+$base-margin: 12;
+$base-table-row-padding: 12;

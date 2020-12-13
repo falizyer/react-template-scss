@@ -1,0 +1,14 @@
+@import "../asset/variables";
+
+.rts .navbar {
+  display: flex;
+  align-items: center;
+
+  &__menu {
+    margin-left: #{$base-margin}px;
+  }
+
+  &__actions {
+    margin-left: auto;
+  }
+}

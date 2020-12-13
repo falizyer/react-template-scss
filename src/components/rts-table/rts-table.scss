@@ -1,0 +1,34 @@
+@import "../../asset/variables";
+
+.rts-table {
+
+  &.clickable {
+
+    tr {
+      cursor: pointer;
+
+      &:hover td {
+        transform: scale(1.01);
+        color: map-get($color-secondary, normal);
+      }
+    }
+  }
+
+  tr {
+
+    th {
+      text-align: left;
+      height: 40px;
+      box-shadow: 0 2px map-get($color-primary, normal-shadow);
+    }
+
+    td {
+      box-shadow: 0 0 2px map-get($color-primary, normal-shadow);
+      padding: #{$base-table-row-padding}px;
+
+      &.text-center {
+        text-align: center;
+      }
+    }
+  }
+}
