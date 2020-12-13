@@ -65,7 +65,7 @@ const TableRow = (row) => {
 };
 
 const TopHeadlines = () => {
-  const dataContext = useContext(DataContext);
+  const {state, dispatch} = useContext(DataContext);
 
   return (
     <React.Fragment>
@@ -80,17 +80,37 @@ const TopHeadlines = () => {
 
         <RtsTable
           className="clickable"
-          isLoading={dataContext.state.isLoading}
-          data={dataContext.state.articles}
-          keys={[{key: "title", label: "Title"}, {key: "author", label: "Author"}, {
-            key: "publishedAt",
-            label: "Published"
-          }]}
+          isLoading={state.isLoading}
+          data={state.articles}
+          total={state.totalArticles}
+          page={state.page}
+          onNext={page => loadPage(page)}
+          onPrevious={page => loadPage(page)}
+          keys={[
+            {key: "title", label: "Title"},
+            {key: "author", label: "Author"},
+            {key: "publishedAt", label: "Published"}]}
           row={TableRow}
-        />
+        >
+          {state.error
+            ? (
+              <tr>
+                <td className="color-error" colSpan={3}>{state.error.message}</td>
+              </tr>
+            ) : void 0}
+        </RtsTable>
+
+
       </div>
     </React.Fragment>
   );
+
+  function loadPage(page) {
+    dispatch({
+      type: "load-page",
+      payload: {page}
+    });
+  }
 };
 
 export default TopHeadlines;

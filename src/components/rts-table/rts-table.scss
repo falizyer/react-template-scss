@@ -16,10 +16,17 @@
 
   tr {
 
-    th {
-      text-align: left;
-      height: 40px;
-      box-shadow: 0 2px map-get($color-primary, normal-shadow);
+    thead {
+
+      tr:first-child {
+        text-align: center;
+      }
+
+      tr:last-child {
+        text-align: left;
+        height: 40px;
+        box-shadow: 0 2px map-get($color-primary, normal-shadow);
+      }
     }
 
     td {

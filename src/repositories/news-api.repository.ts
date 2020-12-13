@@ -72,6 +72,7 @@ export interface ITopHeadlinesParameters {
   category?: Categories;
   q?: string;
   pageSize?: number;
+  page: number;
   apiKey?: string;
 }
 
@@ -85,11 +86,12 @@ export class NewsApiRepository {
   static readonly ApiKey = "c1b4621a8c1945a793276dd503e9d9d2";
   static readonly URL = "http://newsapi.org/v2";
 
-  static getTopHeadlines(params: ITopHeadlinesParameters = {country: Countries.us}): Promise<ITopHeadlinesResponse> {
+  static getTopHeadlines(params: ITopHeadlinesParameters = {country: Countries.us, page: 0}): Promise<ITopHeadlinesResponse> {
     return axios.get<ITopHeadlinesParameters, AxiosResponse<ITopHeadlinesResponse>>(`${this.URL}/top-headlines`, {
       params: {
         apiKey: this.ApiKey,
-        ...params,
+        pageSize: 10,
+        ...params
       }
     }).then(response => response.data);
   }

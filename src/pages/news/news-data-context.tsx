@@ -1,11 +1,14 @@
-import React, {Dispatch, Reducer, ReducerAction, useEffect, useReducer, useState} from "react";
-import {ITopHeadlineArticle, NewsApiRepository} from "../../repositories/news-api.repository";
+import React, {Dispatch, Reducer, ReducerAction, useEffect, useReducer} from "react";
+import {Countries, ITopHeadlineArticle, NewsApiRepository} from "../../repositories/news-api.repository";
 
 export interface IDataState {
   articles: ITopHeadlineArticle[];
-  article: ITopHeadlineArticle | null;
+  page: number;
   totalArticles: number;
   isLoading: boolean;
+  error: {
+    message: string
+  } | null;
 }
 
 export interface IDataAction {
@@ -19,38 +22,46 @@ export interface INewsDataContextProps {
 
 export interface IContextValue {
   state: IDataState;
-  dispatch: Dispatch<ReducerAction<Reducer<IDataState, IDataAction>>> | null;
+  dispatch: Dispatch<ReducerAction<Reducer<IDataState, IDataAction>>>;
 }
 
 const initialState: IDataState = {
   articles: [],
-  article: null,
+  page: 1,
   totalArticles: 0,
-  isLoading: true
+  isLoading: true,
+  error: null
 };
 
 export const DataContext = React.createContext<IContextValue>({
   state: initialState,
-  dispatch: null
+  dispatch: () => void 0,
 });
 
 function reducer(state: IDataState, action: IDataAction) {
+  const {articles, totalArticles, page, error} = action.payload;
+
   switch (action.type) {
     case "load-started":
       return Object.assign(state, {
         isLoading: true
       });
     case "load-finished":
-      const {articles, totalArticles} = action.payload;
       return Object.assign({}, state, {
         articles,
         totalArticles,
+        error: null,
         isLoading: false
       });
-    case "article-selected":
-      const {article} = action.payload;
+    case "load-error":
       return Object.assign({}, state, {
-        article
+        error,
+        isLoading: false
+      });
+    case "load-page":
+      return Object.assign({}, state, {
+        page,
+        isLoading: true
       });
     default:
       throw new Error();
@@ -61,8 +72,8 @@ const NewsDataContext = (props: INewsDataContextProps) => {
   const [state, dispatch] = useReducer<Reducer<IDataState, IDataAction>>(reducer, initialState);
 
   useEffect(() => {
-    dispatch({type: "load-started", payload: {}});
-    NewsApiRepository.getTopHeadlines()
+    console.log(state.page);
+    NewsApiRepository.getTopHeadlines({country: Countries.us, page: state.page})
       .then(data => {
         dispatch({
           type: "load-finished",
@@ -71,8 +82,26 @@ const NewsDataContext = (props: INewsDataContextProps) => {
             totalArticles: data.totalResults
           }
         });
+      })
+      .catch(error => {
+        let payload = {
+          error: {
+            message: "Unhandled Server Error"
+          }
+        }
+        if (error.response?.data) {
+          payload = {
+            error: {
+              message: `Error: ${error.response?.data.message}`
+            }
+          }
+        }
+        dispatch({
+          type: "load-error",
+          payload
+        });
       });
-  }, []);
+  }, [state.page]);
 
   return (
     <DataContext.Provider value={{

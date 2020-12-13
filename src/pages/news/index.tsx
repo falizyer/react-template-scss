@@ -11,9 +11,10 @@ const Routes = ({match}) => {
   return (
     <NewsDataContext>
       <section className="rts__main__section">
+        <Redirect from="/news" to={`${match.url}/top-headlines`} exact/>
+
         <ErrorBoundaryRoute path={`${match.url}/top-headlines`} component={TopHeadlines} exact/>
         <ErrorBoundaryRoute path={`${match.url}/top-headlines/:id`} component={Article} exact/>
-        <Redirect from="/news" to={`${match.url}/top-headlines`} exact/>
       </section>
     </NewsDataContext>
   );
