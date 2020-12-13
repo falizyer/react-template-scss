@@ -26,7 +26,7 @@ const initialState: IDataState = {
   articles: [],
   article: null,
   totalArticles: 0,
-  isLoading: false
+  isLoading: true
 };
 
 export const DataContext = React.createContext<IContextValue>({

@@ -26,6 +26,7 @@ const RtsTable = (props: IRtsTableProps) => {
       </thead>
 
       <tbody>
+
       {props.isLoading ? (<tr>
         <td className="text-center" colSpan={props.keys.length}><Loading/></td>
       </tr>) : null}

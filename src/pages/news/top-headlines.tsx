@@ -52,7 +52,7 @@ const RowElement = (row) => {
 const TableRow = (row) => {
   return (
     <Link key={row.title}
-          to={`/news/${row.id}`}
+          to={`/news/top-headlines/${row.id}`}
           component={(rest) => <RowElement id={row.id}
                                            title={row.title}
                                            source={row.source}
@@ -68,22 +68,28 @@ const TopHeadlines = () => {
   const dataContext = useContext(DataContext);
 
   return (
-    <div className="container column box">
-      <h3>Working with tables</h3>
-      <p>
-        Here you may find basic example of how table works with pure react
-      </p>
-      <RtsTable
-        className="clickable"
-        isLoading={dataContext.state.isLoading}
-        data={dataContext.state.articles}
-        keys={[{key: "title", label: "Title"}, {key: "author", label: "Author"}, {
-          key: "publishedAt",
-          label: "Published"
-        }]}
-        row={TableRow}
-      />
-    </div>
+    <React.Fragment>
+      <header className="container column box">
+        <h3>Working with tables</h3>
+      </header>
+
+      <div className="container column box">
+        <p>
+          Here you may find basic example of how table works with pure react
+        </p>
+
+        <RtsTable
+          className="clickable"
+          isLoading={dataContext.state.isLoading}
+          data={dataContext.state.articles}
+          keys={[{key: "title", label: "Title"}, {key: "author", label: "Author"}, {
+            key: "publishedAt",
+            label: "Published"
+          }]}
+          row={TableRow}
+        />
+      </div>
+    </React.Fragment>
   );
 };
 

@@ -1,27 +1,35 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext} from "react";
 
-import {ITopHeadlineArticle, NewsApiRepository} from "../../repositories/news-api.repository";
-import RtsTable from "../../components/rts-table/rts-table";
-import Overlay from "../../components/overlay";
+import Loading from "../../components/loading";
 
-const Article = () => {
-  const [topHeadlines, setTopHeadlines] = useState<ITopHeadlineArticle[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+import {DataContext} from "./news-data-context";
 
-  useEffect(() => {
-    setIsLoading(true);
-    NewsApiRepository.getTopHeadlines()
-      .then(data => data.articles.map((article, index) => ({id: index, ...article})))
-      .then(articles => {
-        setTopHeadlines(articles || []);
-        setIsLoading(false);
-      });
-  }, []);
+import "./article.scss";
+
+const Article = ({match: {params: {id}}}) => {
+  const dataContext = useContext(DataContext);
+  const article = dataContext.state.articles[id];
 
   return (
-    <div className="container column box">
-      <h3>Working with articles</h3>
-    </div>
+    <React.Fragment>
+      {
+        dataContext.state.isLoading
+          ? (<div className="container box all-center"><Loading/></div>)
+          : (
+            <React.Fragment>
+              <header className="container column box">
+                <h3>{article.title}</h3>
+                <span>{new Date(article.publishedAt).toDateString()}</span>
+              </header>
+
+              <div className="rts__article__content container box wrap">
+                <img src={article.urlToImage} alt={article.title} width={400}/>
+                <p>{article.content || article.description}</p>
+              </div>
+            </React.Fragment>
+          )
+      }
+    </React.Fragment>
   );
 };
 
