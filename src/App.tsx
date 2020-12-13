@@ -5,8 +5,6 @@ import {ErrorBoundary, NavBar, Footer, Header} from "./components";
 
 import AppRoutes from "./App.routes";
 
-import "./App.scss";
-
 const baseHref = document.querySelector("base")?.getAttribute("href")?.replace(/\/$/, "");
 
 function App() {
