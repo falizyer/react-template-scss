@@ -1,8 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 
-import {ITopHeadlineArticle, NewsApiRepository} from "../../repositories/news-api.repository";
 import RtsTable from "../../components/rts-table/rts-table";
 import Overlay from "../../components/overlay";
+import {DataContext} from "./news-data-context";
+import {Link} from "react-router-dom";
 
 const DescriptionHint = ({title, description, url, event}) => {
   const {top, x} = event.target.getBoundingClientRect();
@@ -15,36 +16,56 @@ const DescriptionHint = ({title, description, url, event}) => {
   </Overlay>);
 };
 
-const TableRow = (row) => {
+const RowElement = (row) => {
   const [event, setEvent] = useState<any>(null);
-
   return (
-    <React.Fragment key={row.title}>
-      <tr onMouseOver={($event) => setEvent($event)} onMouseLeave={() => {setEvent(null)}}>
+    <React.Fragment>
+      <tr onClick={onClick}
+          onMouseOver={onMouseOver}
+          onMouseLeave={onMouseLeave}>
         <td>{row.title}</td>
         <td>{row.author || row.source.name}</td>
         <td>{new Date(row.publishedAt).toDateString()}</td>
       </tr>
+
+
       {event ? (<DescriptionHint url={row.urlToImage}
                                  event={event}
                                  title={row.title}
                                  description={row.description}/>) : null}
     </React.Fragment>
   );
+
+  function onClick() {
+    row.navigate(`/news/top-headlines/${row.id}`);
+  }
+
+  function onMouseOver($event) {
+    setEvent($event);
+  }
+
+  function onMouseLeave() {
+    setEvent(null);
+  }
+};
+
+const TableRow = (row) => {
+  return (
+    <Link key={row.title}
+          to={`/news/${row.id}`}
+          component={(rest) => <RowElement id={row.id}
+                                           title={row.title}
+                                           source={row.source}
+                                           author={row.author}
+                                           urlToImage={row.urlToImage}
+                                           description={row.description}
+                                           publishedAt={row.publishedAt}
+                                           {...rest}/>}/>
+  );
 };
 
 const TopHeadlines = () => {
-  const [topHeadlines, setTopHeadlines] = useState<ITopHeadlineArticle[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    setIsLoading(true);
-    NewsApiRepository.getTopHeadlines()
-      .then(data => {
-        setTopHeadlines(data.articles || []);
-        setIsLoading(false);
-      });
-  }, []);
+  const dataContext = useContext(DataContext);
 
   return (
     <div className="container column box">
@@ -54,8 +75,8 @@ const TopHeadlines = () => {
       </p>
       <RtsTable
         className="clickable"
-        isLoading={isLoading}
-        data={topHeadlines}
+        isLoading={dataContext.state.isLoading}
+        data={dataContext.state.articles}
         keys={[{key: "title", label: "Title"}, {key: "author", label: "Author"}, {
           key: "publishedAt",
           label: "Published"

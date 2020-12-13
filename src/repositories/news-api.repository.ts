@@ -53,6 +53,7 @@ export enum Categories {
 }
 
 export interface ITopHeadlineArticle {
+  id?: number;
   author: string;
   title: string;
   description: string;
