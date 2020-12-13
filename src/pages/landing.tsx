@@ -10,7 +10,7 @@ const Landing = () => {
       <div className="container column box">
         <h3>Working with tables</h3>
         <p>
-          Here you may find your best anime <Link className="link color-secondary" to="/news" >click to view</Link>
+          Here you may find your best anime <Link className="link color-secondary" to="/news/top-headlines" >click to view</Link>
         </p>
       </div>
     </section>
